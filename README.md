@@ -8,7 +8,7 @@ Github: https://github.com/kytha/prepr-labs
 
 ## Approach 
 
-The first aspect of the challenge I tackled was the back end. This was because despite having experience with PHP I haven't previosuly worked with the Laravel framework. I thought this was an excellent oppertunity to learn a new skill plus I reasoned this would be the hardest challenge in the project for me.
+The first aspect of the challenge I tackled was the back end. This was because despite having experience with PHP I haven't previously worked with the Laravel framework. I thought this was an excellent oppertunity to learn a new skill plus I reasoned this would be the hardest challenge in the project for me.
 
 ## Back End
 
