@@ -8,19 +8,19 @@ Github: https://github.com/kytha/prepr-labs
 
 ## Approach 
 
-The first dimesion of the challenge I tackled was the back end. This was because despite having experience with PHP I haven't previosuly worked with the Laravel framework. I thought this was an excellent oppertunity to learn a new skill plus I reasoned this would be the hardest challenge in the project for me.
+The first dimension of the challenge I tackled was the back end. This was because despite having experience with PHP I haven't previosuly worked with the Laravel framework. I thought this was an excellent oppertunity to learn a new skill plus I reasoned this would be the hardest challenge in the project for me.
 
 ## Back End
 
 ### SPA configuration
 
-I knew from the start I wanted to make this a single page application. It would really simplyfy the front end where I could leverage the full power of React. To do this I got rid of the default Bootstrap and Vue scaffholding which comes with laravel. I replaced it with the React scaffholding and redirected site traffic to a single HTML template which would launch the React app.   
+I knew from the start I wanted to make this a single page application. It would really simplyfy the front end where I could leverage the full power of React. To do this I got rid of the default Bootstrap and Vue scaffholding which comes with Laravel. I replaced it with a React scaffholding and redirected site traffic to a single HTML template which would launch the React app.   
     
 ### RESTful API
 
-For accessing data on the back end I decided to go with a RESTful API. I choose this method because they are not only an intiutive way to handle data transfer but they also provide a nice seperation of concerns. This allows me to robustly test the API from external programs like Postman.
+For accessing data on the back end I decided to go with a RESTful API. I choose this method because they are not only an intiutive way to handle data transfer but they also provide a nice seperation of concerns. This allows me to robustly test the API through external programs like Postman.
 
-I won't the snippet for the authController because it would make this section quite lengthy but feel free to check out how I handled the auth endpoints in the source code. However, here is the snipper for the LabController;
+I won't show the snippet for the AuthController because it would make this section quite lengthy but feel free to check out how I handled the auth endpoints in the source code. However, here is the snipper for the LabController;
 
 ```php
 public function index()
@@ -116,10 +116,94 @@ Route::group([
 
 As I hinted at earlier, I decided to use React for the frontend. I have the most experience with React compared to other MVC frameworks, and React has a wide range of projects and packages I can leverage for rapid development. 
 
+The goal of the interface is to allow a user to easly find all avaliable labs. When a user clicks on a specific lab it should show it's location on a Google API map and provide some extra information, such as the address and an image of the location if one exists.
+
 ### Wiring Framing
 
-First task was for me to create some wireframes so I could get a feel for how I wanted to display information to the user. This was probably the most crucial step in terms of the percieved quality and ease-of-use for the end user. I decided to split the main dashboard into two sections. One with the google map which will respond the user actions appropriately; the other would be a list of all the labs which the user can browse or search through. Here was what the mock looked like;
+First task was for me to create some wireframes so I could get a feel for how I wanted to display information to the user. This was probably the most crucial step in terms of the percieved quality and ease-of-use for the end user. I decided to split the main dashboard into two sections. One with the google map which will respond the user actions appropriately; the other would be a list of all the labs which the user can browse or search through. Here was what the mock-ups looked like (mobile-first obviously);
+
+<img src="https://raw.githubusercontent.com/Kytha/prepr-labs/master/documents/iPhone_X-XS-11_Pro_home.png"/>
+<img src="https://raw.githubusercontent.com/Kytha/prepr-labs/master/documents/Web_1366_home.png"/>
+<img src="https://raw.githubusercontent.com/Kytha/prepr-labs/master/documents/Web_1366_login.png"/>
 
 ### Material-UI
 
-My UI framework of choose was Material-UI. It is very powerful and comes with quite elegant and modular components. It was quite easy for me to create
+My UI framework of choose was Material-UI. It is very powerful and comes with quite elegant and modular components. It was quite easy for me to create responsive UI which function on all browsers. 
+
+### State Management
+
+For interacting with the back end I equipped my app with Redux with Thunk middleware. This allowed me to fire off asychronous API requests while mantaining a predictable, and dependable app store. This store would drive all components so that there was one single source of truth. Each scene (home, portal, and admin) has a respective duck file which handles all state management and API requests.
+
+### The Map
+
+Setting up the interactive map was slightly more challenging then expected. I choose to go with a library called [google-maps-react](https://github.com/google-map-react/google-map-react). This seemed like the best options due to it seemed to have good documentation and even come with a HOC which handled communications between google's API and the map component. 
+
+However, this ended up being a blessing rather than a curse, since I needed to drive the map not only from the store data but also the complementary interactive list. I found myself having to roll out my own modified components to get the level of control I needed over google's API. If I were to improve this project, I'd definetely invest time in swapping out the map component for a new one. Still, it got the job done.  
+
+### Implementing a Search
+
+A cool feature I implemented was a search input for aggregating the interactive list. To do this in a way which would scale, I not only stored the lab data payload from the server as a flat list, but also as a map object which mapped labs into buckets based on the first letter of their title. Her is a snippet of the reducer which achieved this;
+
+```javascript
+export default function(state = INITIAL_STATE, action) {
+    switch (action.type) {
+        case REQUEST_LABS:
+            return {
+                ...state,
+                isLoading: true
+            };
+        case RECEIVE_LABS:
+            let populate_me = {};
+            action.payload.data.forEach(lab => {
+                const letter = lab.title.charAt(0).toLowerCase();
+                if (populate_me[letter]) {
+                    populate_me[letter].push(lab);
+                } else {
+                    populate_me[letter] = [lab];
+                }
+            });
+            return {
+                ...state,
+                labs_by_first_letter: populate_me,
+                labs_list: action.payload.data,
+                isLoading: false
+            };
+        case REQUEST_LAB_ERROR:
+            return {
+                ...state,
+                error: action.payload,
+                isLoading: false
+            };
+        default:
+            return state;
+    }
+}
+```
+Then, if a user decides to search, we can apply the query like so,
+
+``` javascript
+const applySearch = arr => {
+    if (query === "") return arr;
+    const first_letter = query.charAt(0).toLowerCase();
+    if (!labs_by_first_letter[first_letter]) return [];
+    else
+        return labs_by_first_letter[first_letter].filter(lab => {
+            const i = lab.title.toLowerCase();
+            const q = query.toLowerCase();
+            return i.startsWith(q);
+        });
+};
+```
+
+## Closing Remarks
+
+I really enjoyed this project as it presented me with an oppertunity to learn a new skills and a new framework which I otherwise may not have taken the time to understand. It was challenging at some parts but rewarding at so many others. Some things to improve on/features to add if given more time would be;
+
+- Add ability to remove labs as an admin 
+- Add ability to manage users and permissions as an admin
+- Explore different options for a react google map package which offers more control
+- Code splitting for optimized load times
+- Unit testing and code linting 
+
+Thank you so much for this oppertunity! I had a lot of fun!
+
