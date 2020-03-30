@@ -199,7 +199,7 @@ const applySearch = arr => {
 
 ### Implementing Analytics
 
-I thought it would be a cool feature to add an analytics tab to the app. This analytics tab currently features a chart that displays the distribution of labs by city. Do do this I utilized the [ApexCharts](https://apexcharts.com/) library. I think this feature shows much potential with the application, as more powerful aggregation and data visualization tools could be utilized to give the user extreme clarity. Check out the demo to see the chart in action!
+I thought it would be a cool feature to add an analytics tab to the app. This analytics tab currently features a chart that displays the distribution of labs by city. To do this I utilized the [ApexCharts](https://apexcharts.com/) library. I think this feature shows significant potential with the application, as more powerful aggregation and data visualization tools could be utilized to give the user extreme clarity. Check out the demo to see the chart in action!
 
 ## Closing Remarks
 
@@ -207,7 +207,7 @@ I really enjoyed this project as it presented me with an opportunity to learn ne
 
 - Add the ability to remove labs as an admin 
 - Add the ability to manage users and permissions as an admin
-- Explore different options for a react google map package which offers more control
+- Explore different options for a react Google Maps package which offers more control
 - Code splitting for optimized load times
 - Unit testing and code linting 
 
