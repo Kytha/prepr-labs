@@ -8,19 +8,19 @@ Github: https://github.com/kytha/prepr-labs
 
 ## Approach 
 
-The first aspect of the challenge I tackled was the back end. This was because despite having experience with PHP I haven't previously worked with the Laravel framework. I thought this was an excellent oppertunity to learn a new skill plus I reasoned this would be the hardest challenge in the project for me.
+The first aspect of the challenge I tackled was the back end. This was because despite having experience with PHP I haven't previously worked with the Laravel framework. I thought this was an excellent oppurtunity to learn a new skill plus I reasoned this would be the hardest challenge in the project for me.
 
 ## Back End
 
 ### SPA configuration
 
-I knew from the start I wanted to make this a single page application. It would really simplyfy the front end where I could leverage the full power of React. To do this I got rid of the default Bootstrap and Vue scaffholding which comes with Laravel. I replaced it with a React scaffholding and redirected site traffic to a single HTML template which would launch the React app.   
+I knew from the start I wanted to make this a single page application. It would really simplify the front end where I could leverage the full power of React. To do this I got rid of the default Bootstrap and Vue scaffholding which comes with Laravel. I replaced it with a React scaffholding and redirected site traffic to a single HTML template which would launch the React app.   
     
 ### RESTful API
 
 For accessing data on the back end I decided to go with a RESTful API. I choose this method because they are not only an intiutive way to handle data transfer but they also provide a nice seperation of concerns. This allows me to robustly test the API through external programs like Postman.
 
-I won't show the snippet for the AuthController because it would make this section quite lengthy but feel free to check out how I handled the auth endpoints in the source code. However, here is the snipper for the LabController;
+I won't show the snippet for the AuthController because it would make this section quite lengthy but feel free to check out how I handled the auth endpoints in the source code. However, here is the snippet for the LabController;
 
 ```php
 public function index()
