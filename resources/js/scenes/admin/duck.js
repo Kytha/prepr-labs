@@ -1,6 +1,6 @@
 import axios from "axios";
 import { tokenConfig } from "../../core/auth/actions";
-import { dispatchSuccess } from "../../core/lib/messages";
+import { dispatchSuccess, dispatchError } from "../../core/lib/messages";
 
 const LAB_ADDED = "LAB_ADDED";
 const REQUEST_LABS = "REQUEST_LABS";
@@ -53,7 +53,7 @@ export const addLab = lab => (dispatch, getState) => {
             dispatchSuccess("Added!", "Lab successfully added!");
         })
         .catch(err => {
-            console.dir(err);
+            dispatchError(err);
         });
 };
 

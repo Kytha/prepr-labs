@@ -101,10 +101,11 @@ export class MapContainer extends React.Component {
                 center={this.getCenter()}
             >
                 {labs &&
-                    labs.map(lab => {
+                    labs.map((lab, index) => {
                         return (
                             <Marker
                                 title={lab.title}
+                                key={index}
                                 name={lab.title}
                                 position={{
                                     lat: lab.latitude,

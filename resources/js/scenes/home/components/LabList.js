@@ -116,6 +116,7 @@ export default function LabList(props) {
                     const isItemSelected = isSelected(lab.id);
                     return (
                         <LabCard
+                            key={index}
                             lab={lab}
                             selected={isItemSelected}
                             onClick={handleClick}
