@@ -6,6 +6,8 @@ Email: thatchek@mcmaster.ca
 
 Github: https://github.com/kytha/prepr-labs
 
+Demo: https://youtu.be/nLyn6MQfuSg
+
 ## Approach 
 
 The first aspect of the challenge I tackled was the back end. This was because despite having experience with PHP I haven't previously worked with the Laravel framework. I thought this was an excellent oppurtunity to learn a new skill plus I reasoned this would be the hardest challenge in the project for me.
@@ -194,6 +196,10 @@ const applySearch = arr => {
         });
 };
 ```
+
+### Implementing Analytics
+
+I thought it would be a cool feature to add an analytics tab to the app. This analytics tab currently features a chart that displays the distribution of labs by city. Do do this I utilized the [ApexCharts](https://apexcharts.com/) library. I think this feature shows much potential with the application, as more powerful aggregation and data visualization tools could be utilized to give the user extreme clarity. Check out the demo to see the chart in action!
 
 ## Closing Remarks
 
