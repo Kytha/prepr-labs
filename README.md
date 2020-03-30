@@ -1,79 +1,125 @@
-<p align="center"><img src="https://res.cloudinary.com/dtfbvvkyp/image/upload/v1566331377/laravel-logolockup-cmyk-red.svg" width="400"></p>
+## Full Stack Developer Work Challenge
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/d/total.svg" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/v/stable.svg" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
-</p>
+Author: Kyle Thatcher
 
-## About Laravel
+Email: thatchek@mcmaster.ca
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Github: https://github.com/kytha/prepr-labs
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Approach 
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+The first dimesion of the challenge I tackled was the back end. This was because despite having experience with PHP I haven't previosuly worked with the Laravel framework. I thought this was an excellent oppertunity to learn a new skill plus I reasoned this would be the hardest challenge in the project for me.
 
-## Learning Laravel
+## Back End
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### SPA configuration
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+I knew from the start I wanted to make this a single page application. It would really simplyfy the front end where I could leverage the full power of React. To do this I got rid of the default Bootstrap and Vue scaffholding which comes with laravel. I replaced it with the React scaffholding and redirected site traffic to a single HTML template which would launch the React app.   
+    
+### RESTful API
 
-## Laravel Sponsors
+For accessing data on the back end I decided to go with a RESTful API. I choose this method because they are not only an intiutive way to handle data transfer but they also provide a nice seperation of concerns. This allows me to robustly test the API from external programs like Postman.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+I won't the snippet for the authController because it would make this section quite lengthy but feel free to check out how I handled the auth endpoints in the source code. However, here is the snipper for the LabController;
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[British Software Development](https://www.britishsoftware.co)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- [UserInsights](https://userinsights.com)
-- [Fragrantica](https://www.fragrantica.com)
-- [SOFTonSOFA](https://softonsofa.com/)
-- [User10](https://user10.com)
-- [Soumettre.fr](https://soumettre.fr/)
-- [CodeBrisk](https://codebrisk.com)
-- [1Forge](https://1forge.com)
-- [TECPRESSO](https://tecpresso.co.jp/)
-- [Runtime Converter](http://runtimeconverter.com/)
-- [WebL'Agence](https://weblagence.com/)
-- [Invoice Ninja](https://www.invoiceninja.com)
-- [iMi digital](https://www.imi-digital.de/)
-- [Earthlink](https://www.earthlink.ro/)
-- [Steadfast Collective](https://steadfastcollective.com/)
-- [We Are The Robots Inc.](https://watr.mx/)
-- [Understand.io](https://www.understand.io/)
-- [Abdel Elrafa](https://abdelelrafa.com)
-- [Hyper Host](https://hyper.host)
-- [Appoly](https://www.appoly.co.uk)
-- [OP.GG](https://op.gg)
-- [云软科技](http://www.yunruan.ltd/)
+```php
+public function index()
+{
+    return response()->json(['data' => Lab::all()], 200);
+}
 
-## Contributing
+public function show(Lab $lab)
+{
+    return $lab;
+}
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+public function store(Request $request)
+{
+    $lab = Lab::create($request->all());
 
-## Code of Conduct
+    return response()->json($lab, 201);
+}
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+public function update(Request $request, Lab $lab)
+{
+    $lab->update($request->all());
 
-## Security Vulnerabilities
+    return response()->json($lab, 200);
+}
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+public function delete(Lab $lab)
+{
+    $lab->delete();
 
-## License
+    return response()->json(null, 204);
+}
+```
+### Authentication & Permissions
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+For authentication I utilized the passport package, and subsequently oauth. I decided to roll my own permissions system because I had difficutly finding a solution which was quick and simple. 
+
+Implementing passport was a breeze, just needed to set up the passport routes and configure laravel to use it as the default authentication guard. 
+
+For the permission system I set up a many-to-many relationship between the User model and a new Roles model. I also added a helper function to the User model to get all the user's permissions like so;
+
+```php
+public function roles() {
+    return $this->belongsToMany("App\Role");
+}
+```
+Lastly, I defined a new middleware which would intercept requests gaurded by admin and check if the user was indeed an admin like so;
+```php
+public function handle($request, Closure $next)
+{
+    $userRoles = Auth::user()->roles->pluck('name');
+    if (!$userRoles->contains("admin")) {
+        return response()->json([
+            'message' => 'You do not have the required permissions'
+        ], 401);
+    };
+    return $next($request);
+}
+```
+The last step was to setup the routes. Here is the code snippet for how the routes ended up looking. I used nested routes to define paths which required authentication and admin status;
+
+```php
+Route::group([
+    'prefix' => 'auth'
+], function () {
+    Route::post('login', 'AuthController@login');
+    Route::post('signup', 'AuthController@signup');
+  
+    Route::group([
+      'middleware' => 'auth:api'
+    ], function() {
+        Route::get('logout', 'AuthController@logout');
+        Route::get('user', 'AuthController@user');
+    });
+});
+
+Route::group([
+    'middleware' => 'auth:api'
+], function() {
+    Route::get('labs', 'LabController@index');
+    Route::get('labs/{lab}', 'LabController@show');
+    Route::group([
+        'middleware' => 'admin'
+    ], function () {
+        Route::post('labs', 'LabController@store');
+        Route::put('labs/{lab}', 'LabController@update');
+        Route::delete('labs/{lab}', 'LabController@delete');
+    });
+});
+```
+
+## Front end
+
+As I hinted at earlier, I decided to use React for the frontend. I have the most experience with React compared to other MVC frameworks, and React has a wide range of projects and packages I can leverage for rapid development. 
+
+### Wiring Framing
+
+First task was for me to create some wireframes so I could get a feel for how I wanted to display information to the user. This was probably the most crucial step in terms of the percieved quality and ease-of-use for the end user. I decided to split the main dashboard into two sections. One with the google map which will respond the user actions appropriately; the other would be a list of all the labs which the user can browse or search through. Here was what the mock looked like;
+
+### Material-UI
+
+My UI framework of choose was Material-UI. It is very powerful and comes with quite elegant and modular components. It was quite easy for me to create
